@@ -10,9 +10,9 @@ ___
 
 1. 首先建立一個簡單的基本模型 **Model 1**，包含兩層 convolution layer、pooling layer 和一個 activation function，最後連接一個 fully connected layer。
 2. 利用Model 1嘗試不同的 **Epoch**, **Optimizer**，分別有 20、25、30、50 及 SGD、RMSprop、Adagrad、Adam。
-3. 再以Model 1為基礎，建立不同的模型 **Model 2**, **Model 3**，並分別使用不同 **Learning Rate** (0.02, 0.002, 0.0002) 進行訓練。
-    **Model 2** 中增加了一層 convolution layer 以及在 activation function 後及 fully connected layer 前加入 Dropout 。
-    **Model 3** 則是在 activation function 前加入 batch normalization layer。
+3. 再以Model 1為基礎，建立不同的模型 **Model 2**, **Model 3**，並分別使用不同 **Learning Rate** (0.02, 0.002, 0.0002) 進行訓練。<br>
+    **Model 2** 中增加了一層 convolution layer 以及在 activation function 後及 fully connected layer 前加入 Dropout 。<br>
+    **Model 3** 則是在 activation function 前加入 batch normalization layer。<br>
     
 5. 依照上面的結果選定的模型與基本參數，再進行 Hyper Parameters 的調整，調整的部分有 convolution layer 的 out_channels、kernel_size 以及 pooling layer 的 kernel_size。
 6. 最後綜合上述實驗結果挑選適合的參數再次訓練模型得出結果。
@@ -21,7 +21,7 @@ ___
 
 利用Conv2d、MaxPool2d以及Linear建立模型，Activation Function使用ReLU()完成建構卷積神經網路
 
-```python=
+```python
 ----------------------------------------------------------------
         Layer (type)               Output Shape         Param #
 ================================================================
@@ -47,7 +47,7 @@ ___
 #### Model 2
 
 以Model 1為基礎，增加一些Conv2d及Dropout
-```python=
+```python
 ----------------------------------------------------------------
         Layer (type)               Output Shape         Param # 
 ================================================================
@@ -73,7 +73,7 @@ Estimated Total Size (MB): 1.56
 ___
 #### Model 3
 以Model 1為基礎，增加Batch Normalization Layer
-```python=
+```python
 ----------------------------------------------------------------
         Layer (type)               Output Shape         Param # 
 ================================================================
@@ -103,10 +103,10 @@ ___
 ## Ⅱ. Source code explanations
 
 ### Dataset split
-將資料讀入並分隔成 train sets 以及 test sets，再建立 PyTorch Dataset。
+將資料讀入並分隔成 train sets 以及 test sets，再建立 PyTorch Dataset。<br>
 主要架構是利用教授作業說明中附上的程式碼進行修改，將圖片的路徑及 label 分別存入 train.csv 及 test.csv，建立自己的 Dataset 並在當中進行讀取圖片的動作。
 
-```python=
+```python
 import os
 import cv2
 import torch
@@ -164,11 +164,11 @@ if __name__ == "__main__":
 ___
 ### DataLoader
 
-import 需要的 module 並設定訓練需要的參數。
-利用自己建的 Dataset 將 data 讀入，並將 train data 分出 30% 做為 validation data。
-再分別用 DataLoader 以 batch 的方式載入資料進行訓練。
+import 需要的 module 並設定訓練需要的參數。<br>
+利用自己建的 Dataset 將 data 讀入，並將 train data 分出 30% 做為 validation data。<br>
+再分別用 DataLoader 以 batch 的方式載入資料進行訓練。<br>
 
-```python=
+```python
 # import module
 import torch
 import torch.nn as nn
@@ -197,7 +197,7 @@ tst_loader = DataLoader(dataset=tst_data, batch_size=BATCH_SIZE)
 ___
 ### Building a Convolutional Neural Network
 建立 CNN Model，並設定 Optimizer、Loss function。
-```python=+
+```python
 # Model
 class CNN_Model(nn.Module):
     def __init__(self):
@@ -235,16 +235,16 @@ class CNN_Model(nn.Module):
         output = self.fc1(x)                                        # Linear function (readout)
         return output, x                                            # return x for visualization
 ```
-```python=+
+```python
 model = CNN_Model()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.0002)         # optimize all cnn parameters
 loss_func = nn.CrossEntropyLoss()                                   # the target label is not one-hotted
 ```
 ___
 ### Train the model
-設定訓練模型需要的步驟，forward -> backward -> gradient -> evaluate，
+設定訓練模型需要的步驟，forward -> backward -> gradient -> evaluate，<br>
 並在每個 Epoch 輸出 Train loss、Train accuracy、Validation loss、Validation accuracy 方便觀察訓練過程。
-```python=+
+```python
 def fit_model(model, loss_func, optimizer, num_epochs, train_loader, test_loader):
     # Traning the Model
     training_loss = []                                              # list for store loss & acc value
@@ -300,7 +300,7 @@ def fit_model(model, loss_func, optimizer, num_epochs, train_loader, test_loader
 
 ```
 
-```python=+
+```python
 training_loss, training_accuracy, validation_loss, validation_accuracy = fit_model(model, loss_func, optimizer, num_epochs, trn_loader, valid_loader)
 ```
 
@@ -308,7 +308,7 @@ ___
 ### Test the model
 在訓練結束後利用 Test Dataset 進行測試，並輸出 Test accuracy。
 
-```python=+
+```python
 # test the model
 correct_test = 0
 total_test = 0
@@ -326,7 +326,7 @@ ___
 
 將訓練過程圖像化，輸出 Train 和 Validation 的 loss、accuracy。
 
-```python=+
+```python
 # visualization train & validation loss
 plt.plot(range(num_epochs), training_loss, label='Training_loss')
 plt.plot(range(num_epochs), validation_loss, label='validation_loss')
@@ -337,7 +337,7 @@ plt.legend()
 plt.show()
 ```
 
-```python=+
+```python
 # visualization train & validation accuracy
 plt.plot(range(num_epochs), training_accuracy, label='Training_accuracy')
 plt.plot(range(num_epochs), validation_accuracy, label='Validation_accuracy')
@@ -463,7 +463,7 @@ use Model 1
 ---
 ### 使用不同模型架構並調整 learning_rate
 
-Optimizer: Adam
+Optimizer: Adam<br>
 Epoch: 50
 
 #### Learning Rate 0.02
@@ -495,10 +495,10 @@ Epoch: 50
 ___
 ### 調整模型內的參數
 
-use Model 3
-Optimizer: Adam
-Epoch: 50
-Learning rate: 0.002
+use Model 3<br>
+Optimizer: Adam<br>
+Epoch: 50<br>
+Learning rate: 0.002<br>
 
 #### convolution layer 的 out_channels
 | out_channels | Train Accuracy | Test Accuracy |
@@ -532,14 +532,14 @@ ___
 
 ### Epoch & Optimizer
 1. 相同 Epoch 下，Adam 的訓練效果較佳。
-2. Epoch 越大訓練效果越好，但 50 的結果卻差於 30，可能發生 Overfitting。
+2. Epoch 越大訓練效果越好，但 50 的結果卻差於 30，可能發生 Overfitting。<br>
    因模型是使用結構較簡單的 Model 1，推測 Overfitting 的原因可能是資料集不夠大量。
 
 ### Model & Learning rate
-1. 當其餘參數皆無更動時，Learning rate 越小訓練效果越好。
+1. 當其餘參數皆無更動時，Learning rate 越小訓練效果越好。<br>
    但沒有嘗試更小的學習率，無法確定是否當學習率再更小時，訓練效果是否會更好。
-2. 基於前一次的試驗結果，嘗試增加 Dropout 改善 Epoch 50 時的 Overfitting。
-   Learning rate 太大時，Dropout 沒效果，反而照成學習不佳。
+2. 基於前一次的試驗結果，嘗試增加 Dropout 改善 Epoch 50 時的 Overfitting。<br>
+   Learning rate 太大時，Dropout 沒效果，反而照成學習不佳。<br>
    Learning rate 調小時，Dropout 有效果，但進步幅度不大。
 3. 改用正規化 (在 activation function 前加入 batch normalization layer) 來改善 Overfitting ，訓練效果進步明顯，在 Learning rate = 0.02 時，Test accuracy 也有 91.11%
    
