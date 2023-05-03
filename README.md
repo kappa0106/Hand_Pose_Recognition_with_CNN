@@ -1,4 +1,7 @@
 # Programming Assignment 1: Hand Pose Recognition with CNN
+
+![GitLab (self-managed)](https://img.shields.io/gitlab/license/kappa0106/Hand_Pose_Recognition_with_CNN?style=for-the-badge)
+![GitHub top language](https://img.shields.io/github/languages/top/kappa0106/Hand_Pose_Recognition_with_CNN?style=for-the-badge)
     
     用CNN辨識三種手勢
     
